@@ -127,6 +127,8 @@ for ii=1:length(uu)
         ind=ind+1;
         A=NUM(lam_ind,ind);
         
+        raw_scans=A;
+        
         if length(ind) > 2
             %look for outlier scans
             lind=find(dat(sampNum).wavelength >=490 & dat(sampNum).wavelength <= 510);
@@ -149,10 +151,12 @@ for ii=1:length(uu)
             
         end
         
-        dat(sampNum).abs_raw=A;
-        
         ind=ind-1;
         dat(sampNum).abs_good_scans=extractAfter(TXT(1,ind),'ag_');
+        
+        dat(sampNum).abs_raw_scans=raw_scans(:,igood);
+        
+        dat(sampNum).abs_raw=A;        
         
         di1=find(di_ind < min(ind));
         di1=di1(end);
@@ -168,6 +172,7 @@ for ii=1:length(uu)
         dat(sampNum).abs_corr=dat(sampNum).abs_raw-dat(sampNum).di_avg;
         if dat(sampNum).wavelength(1) > dat(sampNum).wavelength(end)
             dat(sampNum).wavelength=flipud(dat(sampNum).wavelength);
+            dat(sampNum).abs_raw_scans=flipud(dat(sampNum).abs_raw_scans);
             dat(sampNum).abs_raw=flipud(dat(sampNum).abs_raw);
             dat(sampNum).di1=flipud(dat(sampNum).di1);
             dat(sampNum).di2=flipud(dat(sampNum).di2);
